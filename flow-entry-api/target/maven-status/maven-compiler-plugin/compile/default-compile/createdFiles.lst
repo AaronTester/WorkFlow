@@ -1,0 +1,5 @@
+com\flow\api\entry\User.class
+com\flow\api\entry\Role.class
+com\flow\api\entry\CommonResutMessage.class
+com\flow\api\entry\Group.class
+com\flow\api\entry\FunctionPage.class
