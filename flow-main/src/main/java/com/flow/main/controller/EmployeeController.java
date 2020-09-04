@@ -1,7 +1,7 @@
 package com.flow.main.controller;
 
-import com.flow.main.entity.CommonResutMessage;
-import com.flow.main.entity.Employee;
+import com.flow.api.entry.CommonResutMessage;
+import com.flow.api.entry.Employee;
 import com.flow.main.service.EmployeeService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,16 +2,51 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.flow.main.mapper.EmployeeMapper">
-    <select id="queryUserById" parameterType="integer" resultType="com.flow.main.entity.Employee">
-        select * from tbl_employee where id = ${id}
+
+    <resultMap id="empResultMap" type="com.flow.api.entry.Employee">
+        <id property="id" column="id"/>
+        <result property="empName" column="empName"/>
+        <result property="email" column="email"/>
+        <result property="address" column="address"/>
+        <result property="gender" column="gender"/>
+        <association property="department" column="deptId" javaType="com.flow.api.entry.Department">
+            <id property="id" column="id" />
+            <result property="deptName" column="deptName"/>
+        </association>
+    </resultMap>
+
+    <select id="queryUserById" parameterType="integer" resultMap="empResultMap">
+        SELECT
+            e.id,
+            e.empName,
+            e.email,
+            e.gender,
+            e.address,
+            d.id,
+            d.deptName
+        FROM
+            tbl_employee e
+        LEFT JOIN tbl_department d ON e.deptId = d.id
+        WHERE
+            e.id = ${id}
     </select>
 
-    <select id="queryUserList" resultType="com.flow.main.entity.Employee">
-        select * from tbl_employee
+    <select id="queryUserList" resultMap="empResultMap">
+        SELECT
+            e.id,
+            e.empName,
+            e.email,
+            e.gender,
+            e.address,
+            d.id,
+            d.deptName
+        FROM
+            tbl_employee e
+        LEFT JOIN tbl_department d ON e.deptId = d.id
     </select>
 
-    <select id="checkEmployee" resultType="com.flow.main.entity.Employee"
-            parameterType="com.flow.main.entity.Employee">
+    <select id="checkEmployee" resultMap="empResultMap"
+            parameterType="com.flow.api.entry.Employee">
         select  * from tbl_employee where empName = #{empName}
     </select>
 </mapper>

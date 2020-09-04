@@ -1,7 +1,8 @@
 package com.flow.main.mapper;
 
-import com.flow.main.entity.Employee;
+import com.flow.api.entry.Employee;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.Mapping;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 @Mapper
 public interface EmployeeMapper {
 
-    public Employee queryUserById(Integer id);
+    public Employee queryUserById(@Param("id") Integer id);
 
     public List<Employee> queryUserList();
 

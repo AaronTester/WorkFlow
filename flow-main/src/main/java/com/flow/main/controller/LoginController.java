@@ -1,8 +1,8 @@
 package com.flow.main.controller;
 
-import com.flow.main.entity.CommonResutMessage;
-import com.flow.main.entity.Employee;
-import com.flow.main.service.EmployeeService;
+import com.flow.api.entry.CommonResutMessage;
+import com.flow.api.entry.User;
+import com.flow.main.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,16 +23,17 @@ import javax.servlet.http.HttpSession;
  */
 @Controller
 public class LoginController {
+
     @Autowired
-    EmployeeService employeeService;
+    UserService userService;
 
     @PostMapping("login/check")
-    public ModelAndView checkLoginEmp(@RequestBody Employee employee) {
+    public ModelAndView checkLoginEmp(@RequestBody User user) {
         ModelAndView mav = new ModelAndView();
-        Employee newEmp = employeeService.checkEmp(employee);
-        if (null != newEmp) {
+        User newUser = userService.checkUser(user);
+        if (null != newUser) {
             mav.setViewName("main");
-            mav.addObject("USER_INFO",newEmp);
+            mav.addObject("USER_INFO",newUser);
         }else {
             mav.setViewName("error");
             mav.addObject("ERROR_MSG", "未查询到该用户");
@@ -41,12 +42,12 @@ public class LoginController {
     }
     @PostMapping("login/validate")
     @ResponseBody
-    public CommonResutMessage loginValidate(@RequestBody Employee employee, Model model,
+    public CommonResutMessage loginValidate(@RequestBody User user, Model model,
                                             HttpSession session) {
-        Employee newEmp = employeeService.checkEmp(employee);
-        if(null != newEmp) {
-            model.addAttribute("USERINFO", newEmp);
-            session.setAttribute("USERINFO", newEmp);
+        User newUser = userService.checkUser(user);
+        if(null != newUser) {
+            model.addAttribute("USERINFO", newUser);
+            session.setAttribute("USERINFO", newUser);
             return new CommonResutMessage();
         }else {
             return CommonResutMessage.fail();
@@ -55,12 +56,12 @@ public class LoginController {
 
     @GetMapping("login/main")
     public String goToMain(Model model,HttpSession session) {
-        Employee employee = (Employee) model.getAttribute("USERINFO");
-        if(null != employee) {
+        User user = (User) model.getAttribute("USERINFO");
+        if(null != user) {
             return "main";
-        }else { employee = (Employee) session.getAttribute("USERINFO");
-            if (employee != null) {
-                model.addAttribute("USERINFO", employee);
+        }else { user = (User) session.getAttribute("USERINFO");
+            if (user != null) {
+                model.addAttribute("USERINFO", user);
                 return "main";
             }
            return "error";

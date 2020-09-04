@@ -29,4 +29,6 @@ public class User {
     private List<Integer> roleIds;
     //部门Id
     private Integer groupId;
+    //部门
+    private Department department;
 }

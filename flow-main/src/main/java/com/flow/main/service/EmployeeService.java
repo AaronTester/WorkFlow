@@ -1,6 +1,6 @@
 package com.flow.main.service;
 
-import com.flow.main.entity.Employee;
+import com.flow.api.entry.Employee;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;

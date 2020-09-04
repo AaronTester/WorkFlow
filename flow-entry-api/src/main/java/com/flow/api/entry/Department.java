@@ -1,6 +1,8 @@
-package com.flow.main.entity;
+package com.flow.api.entry;
 
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @Description
@@ -13,4 +15,5 @@ import lombok.Data;
 public class Department {
     private Integer id;
     private String deptName;
+    private List<Employee> employees;
 }

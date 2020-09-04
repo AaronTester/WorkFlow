@@ -8,6 +8,18 @@ function getFormData(id) {
 }
 
 $(document).ready(function () {
+
+    $('ul.sidebar-menu li').click(function () {
+        var li = $('ul.sidebar-menu li.active');
+        li.removeClass('active');
+        $(this).addClass('active');
+    });
+
+    $('.myLeftMenu').click(function (e) {
+        var url = $(this).attr('data');
+        $('#container').load(url);
+    });
+
     loadtableData();
 
     function loadtableData() {
@@ -15,7 +27,7 @@ $(document).ready(function () {
             "language": {
                 "sProcessing": "处理中...",
                 "sZeroRecords": "没有匹配结果",
-                "sInfo":  "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
                 "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
                 "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
                 "sInfoPostFix": "",
@@ -36,19 +48,21 @@ $(document).ready(function () {
             },
             iDisplayLength: 5,
             bDeferRender: true,
+            bLengthChange: false,
+            bFilter: false,
             createdRow: function (row, data, dataIndex) {
             },
-            ajax:function(data,callback,settings) {
+            ajax: function (data, callback, settings) {
                 var pageNum = (data.start / data.length) + 1;
                 var param = {};
                 param.pageSize = data.length;
                 param.pageNum = pageNum;
                 $.ajax({
-                    url: "/emp/page/list",
+                    url: "/user/page/list",
                     type: "get",
-                    dataType:"json",
-                    data:param,
-                    success:function (result) {
+                    dataType: "json",
+                    data: param,
+                    success: function (result) {
                         var returnData = {};
                         returnData.draw = data.draw;
                         returnData.recordsTotal = result.total;
@@ -77,21 +91,21 @@ $(document).ready(function () {
                     return data;
                 }
             }, {
-                name: "empName",
+                name: "userName",
                 title: "姓名",
-                data: "empName"
+                data: "userName"
+            }, {
+                name: "telphone",
+                title: "手机号码",
+                data: "telphone",
+                render: function (data, type, row) {
+                    return data;
+                }
             }, {
                 name: "email",
                 title: "EMAIL",
                 data: "email"
 
-            }, {
-                name: "address",
-                title: "地址",
-                data: "address",
-                render: function (data, type, row) {
-                    return data;
-                }
             }, {
                 name: "gender",
                 title: "性别",
@@ -104,9 +118,9 @@ $(document).ready(function () {
                     }
                 }
             }, {
-                name: "deptId",
+                name: "department.deptName",
                 title: "部门",
-                data: "deptId",
+                data: "department.deptName",
                 render: function (data, type, row) {
                     return data;
                 }
@@ -127,7 +141,7 @@ $(document).ready(function () {
     }
 
     /**
-     *
+     *全选
      */
     $("#checkAll").on("click", function () {
         if (this.checked) {
@@ -139,6 +153,52 @@ $(document).ready(function () {
             $(this).removeAttr('checked');
             $("input[name='ckb-id']").each(function () {
                 this.checked = false;
+            });
+        }
+    });
+    $("#btn_delete").click(function () {
+        var ids = '';
+        $("input[name='ckb-id']").each(function () {
+            if (this.checked) {
+                ids += this.value + ',';
+            }
+        });
+        if (ids != '') {
+            ids = ids.substr(0, ids.length - 1);
+            $.confirm({
+                title: '删除用户',
+                content: '确认删除该条数据？',
+                /*confirm: function(){
+                    $.alert('Confirmed!');
+                },
+                cancel: function(){
+                    $.alert('Canceled!')
+                }*/
+                buttons: {
+                    ok: {
+                        text: "确定",
+                        btnClass: 'btn-primary',
+                        keys: ['enter'],
+                        action: function () {
+                            alert("你点击了确认按钮！")
+
+                        }
+                    },
+                    cancel: {
+                        text: "取消",
+                        btnClass: 'btn-primary',
+                        keys: ['esc'],
+                        action: function () {
+                            alert("你点击了取消按钮！")
+                        }
+
+                    }
+                }
+            });
+        } else {
+            $.alert({
+                title: '删除用户',
+                content: '请选择删除的数据！',
             });
         }
     });

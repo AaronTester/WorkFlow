@@ -1,4 +1,4 @@
-package com.flow.main.entity;
+package com.flow.api.entry;
 
 import lombok.Data;
 
@@ -17,5 +17,6 @@ public class Employee {
     private String email;
     private String address;
     private String gender;
-    private Integer deptId;
+    private Department department;
+    //private Integer deptId;
 }

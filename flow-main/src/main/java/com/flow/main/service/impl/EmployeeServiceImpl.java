@@ -1,6 +1,6 @@
 package com.flow.main.service.impl;
 
-import com.flow.main.entity.Employee;
+import com.flow.api.entry.Employee;
 import com.flow.main.mapper.EmployeeMapper;
 import com.flow.main.service.EmployeeService;
 import com.github.pagehelper.PageHelper;
