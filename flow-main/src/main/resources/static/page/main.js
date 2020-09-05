@@ -165,42 +165,30 @@ $(document).ready(function () {
         });
         if (ids != '') {
             ids = ids.substr(0, ids.length - 1);
-            $.confirm({
-                title: '删除用户',
-                content: '确认删除该条数据？',
-                /*confirm: function(){
-                    $.alert('Confirmed!');
-                },
-                cancel: function(){
-                    $.alert('Canceled!')
-                }*/
-                buttons: {
-                    ok: {
-                        text: "确定",
-                        btnClass: 'btn-primary',
-                        keys: ['enter'],
-                        action: function () {
-                            alert("你点击了确认按钮！")
-
-                        }
-                    },
-                    cancel: {
-                        text: "取消",
-                        btnClass: 'btn-primary',
-                        keys: ['esc'],
-                        action: function () {
-                            alert("你点击了取消按钮！")
-                        }
-
-                    }
-                }
-            });
+            msgConfirm('删除用户','确认删除该条数据？',delUser,ids);
         } else {
-            $.alert({
-                title: '删除用户',
-                content: '请选择删除的数据！',
-            });
+            msgAlert("删除用户","请选择删除的数据！");
         }
     });
-
+    function delUser(ids) {
+        var params = {
+            id:ids,
+            _method:"DELETE"
+        }
+        $.ajax({
+            url: "/user",
+            type: "post",
+            dataType: "json",
+            data: params,
+            success: function (result) {
+                if(result.code == 200) {
+                    msgAlert("删除用户",result.msg);
+                    var start = $("#emps").dataTable().fnSettings()._iDisplayStart;
+                    var length = $("#emps").dataTable().fnSettings()._iDisplayLength;
+                    var page=(start / length); //得到页数值  比页码小1
+                    $("#emps").dataTable().fnPageChange(page);//加载跳转
+                }
+            }
+        });
+    }
 });
